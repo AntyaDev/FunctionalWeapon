@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FunctionalWeapon.Monads;
 
 namespace FunctionalWeapon.Tests.MonadsTests
@@ -7,10 +8,17 @@ namespace FunctionalWeapon.Tests.MonadsTests
     public class MaybeTests
     {
         [TestMethod]
-        public void ToMaybe_method_Should_not_thrown_exception_on_null_reference()
+        public void ToMaybe_should_not_thrown_exception_on_null_reference()
         {
             string nullStr = null;
             nullStr.ToMaybe();
+        }
+
+        [TestMethod]
+        public void ToMaybe_should_not_throw_exception_on_nullable_value_type()
+        {
+            int? i = null;
+            i.ToMaybe();
         }
 
         [TestMethod]
@@ -61,6 +69,22 @@ namespace FunctionalWeapon.Tests.MonadsTests
                             .Bind(s => s.IndexOf("T"))
                             .Bind(i => i > 0 ? "not null" : null);
             Assert.IsTrue(result.IsNone);
+        }
+
+        [TestMethod]
+        public void Bind_should_return_Maybe_with_null_for_struct_type()
+        {
+            string str = null;
+            var result = str.ToMaybe().Bind(s => s.IndexOf("T"));
+            Assert.IsTrue(result.IsNone);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void Value_should_thorwn_exception_for_null_value()
+        {
+            string str = null;
+            var value = str.ToMaybe().Value;
         }
     }
 }

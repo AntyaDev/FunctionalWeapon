@@ -1,25 +1,48 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace FunctionalWeapon.Monads
 {
+    [DebuggerStepThrough]
     public sealed class Maybe<T>
     {
         readonly T _value;
-
+        
         public Maybe(T value)
         {
-            _value = value;
+            if (value != null)
+            {
+                IsSome = true;
+                _value = value;
+            }
+            else IsNone = true;
+        }
+        
+        Maybe()
+        {
+            IsNone = true;
         }
 
-        public bool IsSome { get { return _value != null; } }
+        public bool IsSome { get; private set; }
 
-        public bool IsNone { get { return _value == null; } }
+        public bool IsNone { get; private set; }
 
-        public T Value { get { return _value; } }
+        public T Value
+        {
+            get
+            {
+                if (IsNone) throw new NullReferenceException("Value is null");
+
+                return _value;
+            }
+        }
 
         public Maybe<A> Bind<A>(Func<T, A> func)
         {
-            return IsSome ? func(_value).ToMaybe() : new Maybe<A>(default(A));
+            if (func == null) throw new NullReferenceException("func is null");
+
+            return IsSome ? func(_value).ToMaybe() : new Maybe<A>();
         }
     }
 
@@ -32,6 +55,12 @@ namespace FunctionalWeapon.Monads
 
         public static Maybe<T> ToMaybe<T>(this T? value) where T : struct
         {
+            if (value == null)
+            {
+                var constructor = typeof(Maybe<T>).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, 
+                                                                  null, new Type[0], null);
+                return (Maybe<T>)constructor.Invoke(null);
+            }
             return new Maybe<T>(value.Value);
         }
     }
