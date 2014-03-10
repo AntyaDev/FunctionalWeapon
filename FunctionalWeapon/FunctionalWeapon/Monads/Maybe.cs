@@ -40,7 +40,7 @@ namespace FunctionalWeapon.Monads
 
         public Maybe<A> Bind<A>(Func<T, A> func)
         {
-            if (func == null) throw new NullReferenceException("func is null");
+            if (func == null) return new Maybe<A>();
 
             return IsSome ? func(_value).ToMaybe() : new Maybe<A>();
         }
