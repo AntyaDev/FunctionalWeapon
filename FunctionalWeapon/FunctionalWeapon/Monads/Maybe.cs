@@ -5,6 +5,20 @@ using System.Reflection;
 namespace FunctionalWeapon.Monads
 {
     [DebuggerStepThrough]
+    public static class Maybe
+    {
+        public static Maybe<T> Some<T>(T value)
+        {
+            return value.ToMaybe();
+        }
+
+        public static Maybe<T> None<T>()
+        {
+            return new Maybe<T>();
+        }
+    }
+
+    [DebuggerStepThrough]
     public sealed class Maybe<T>
     {
         readonly T _value;
@@ -19,7 +33,7 @@ namespace FunctionalWeapon.Monads
             else IsNone = true;
         }
         
-        Maybe()
+        public Maybe()
         {
             IsNone = true;
         }
@@ -43,6 +57,13 @@ namespace FunctionalWeapon.Monads
             if (func == null) return new Maybe<A>();
 
             return IsSome ? func(_value).ToMaybe() : new Maybe<A>();
+        }
+
+        public Maybe<A> Bind<A>(Func<T, Maybe<A>> func)
+        {
+            if (func == null) return new Maybe<A>();
+
+            return func(_value);
         }
     }
 
