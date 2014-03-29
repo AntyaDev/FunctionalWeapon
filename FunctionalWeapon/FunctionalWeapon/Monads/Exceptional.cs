@@ -44,6 +44,20 @@ namespace FunctionalWeapon.Monads
                 return new Exceptional<A>(ex);
             }
         }
+
+        public Exceptional<A> Bind<A>(Func<T, Exceptional<A>> func)
+        {
+            try
+            {
+                return HasException
+                    ? new Exceptional<A>(Exception)
+                    : func(_value);
+            }
+            catch (Exception ex)
+            {
+                return new Exceptional<A>(ex);
+            }
+        }
     }
 
     public static class ExceptionalExtensions
