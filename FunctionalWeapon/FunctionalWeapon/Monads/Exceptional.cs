@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace FunctionalWeapon.Monads
 {
+    [DebuggerStepThrough]
     public sealed class Exceptional<T>
     {
         readonly T _value;
