@@ -4,6 +4,32 @@ using System.Diagnostics;
 namespace FunctionalWeapon.Monads
 {
     [DebuggerStepThrough]
+    public static class Exceptional
+    {
+        public static Exceptional<T> Apply<T>(Func<T> func)
+        {
+            try
+            {
+                return new Exceptional<T>(func());
+            }
+            catch (Exception ex)
+            {
+                return new Exceptional<T>(ex);
+            }
+        }
+
+        public static Exceptional<T> Apply<T>(T value)
+        {
+            return new Exceptional<T>(value);
+        }
+
+        public static Exceptional<T> Apply<T>(Exception exception)
+        {
+            return new Exceptional<T>(exception);
+        }
+    }
+
+    [DebuggerStepThrough]
     public sealed class Exceptional<T>
     {
         readonly T _value;
