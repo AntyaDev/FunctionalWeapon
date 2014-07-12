@@ -46,7 +46,7 @@ namespace FunctionalWeapon.Monads
         {
             get
             {
-                if (IsNone) throw new NullReferenceException("Value is null");
+                if (IsNone) throw new InvalidOperationException("Value is null");
 
                 return _value;
             }
@@ -78,7 +78,7 @@ namespace FunctionalWeapon.Monads
         {
             if (value == null)
             {
-                var constructor = typeof(Maybe<T>).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, 
+                var constructor = typeof(Maybe<T>).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
                                                                   null, new Type[0], null);
                 return (Maybe<T>)constructor.Invoke(null);
             }

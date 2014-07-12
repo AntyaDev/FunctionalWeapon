@@ -80,7 +80,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Value_should_thorwn_exception_for_null_value()
         {
             string str = null;
