@@ -7,14 +7,9 @@ namespace FunctionalWeapon.Monads
     [DebuggerStepThrough]
     public static class Maybe
     {
-        public static Maybe<T> Some<T>(T value)
+        public static Maybe<T> Apply<T>(T value)
         {
-            return value.ToMaybe();
-        }
-
-        public static Maybe<T> None<T>()
-        {
-            return new Maybe<T>();
+            return new Maybe<T>(value);
         }
     }
 
@@ -41,6 +36,8 @@ namespace FunctionalWeapon.Monads
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsNone { get { return !_isSome; } }
+
+        public static readonly Maybe<T> None = new Maybe<T>();
 
         public T Value
         {
