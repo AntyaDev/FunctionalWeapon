@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace FunctionalWeapon.Monads
 {
@@ -22,67 +22,61 @@ namespace FunctionalWeapon.Monads
     public sealed class Maybe<T>
     {
         readonly T _value;
-        
+        readonly bool _isSome;
+
+        public Maybe()
+        { }
+
         public Maybe(T value)
         {
             if (value != null)
             {
-                IsSome = true;
+                _isSome = true;
                 _value = value;
-            }
-            else IsNone = true;
-        }
-        
-        public Maybe()
-        {
-            IsNone = true;
+            }            
         }
 
-        public bool IsSome { get; private set; }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsSome { get { return _isSome; } }
 
-        public bool IsNone { get; private set; }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsNone { get { return !_isSome; } }
 
         public T Value
         {
             get
             {
-                if (IsNone) throw new InvalidOperationException("Value is null");
+                if (!_isSome) throw new InvalidOperationException("Value is null");
 
                 return _value;
             }
-        }
-
-        public Maybe<A> Bind<A>(Func<T, A> func)
-        {
-            if (func == null) return new Maybe<A>();
-
-            return IsSome ? func(_value).ToMaybe() : new Maybe<A>();
-        }
-
-        public Maybe<A> Bind<A>(Func<T, Maybe<A>> func)
-        {
-            if (func == null) return new Maybe<A>();
-
-            return func(_value);
         }
     }
 
     public static class MaybeExtensions
     {
+        public static A Match<T, A>(this Maybe<T> maybe, Func<A> none, Func<T, A> some)
+        {
+            return maybe == null || maybe.IsNone ? none() : some(maybe.Value);
+        }
+
+        public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, A> func)
+        {
+            return func == null || maybe == null || maybe.IsNone
+                ? new Maybe<A>()
+                : func(maybe.Value).ToMaybe();
+        }
+
+        public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, Maybe<A>> func)
+        {
+            return func == null || maybe == null || maybe.IsNone
+                ? new Maybe<A>()
+                : func(maybe.Value);
+        }
+
         public static Maybe<T> ToMaybe<T>(this T value)
         {
             return new Maybe<T>(value);
-        }
-
-        public static Maybe<T> ToMaybe<T>(this T? value) where T : struct
-        {
-            if (value == null)
-            {
-                var constructor = typeof(Maybe<T>).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
-                                                                  null, new Type[0], null);
-                return (Maybe<T>)constructor.Invoke(null);
-            }
-            return new Maybe<T>(value.Value);
         }
     }
 }
