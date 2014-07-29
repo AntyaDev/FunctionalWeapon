@@ -18,8 +18,7 @@ namespace FunctionalWeapon.Monads
         readonly T _value;
         readonly bool _isSome;
 
-        public Maybe()
-        { }
+        Maybe() { }
 
         public Maybe(T value)
         {
@@ -50,28 +49,28 @@ namespace FunctionalWeapon.Monads
     [DebuggerStepThrough]
     public static class MaybeExtensions
     {
-        public static A Match<T, A>(this Maybe<T> maybe, Func<A> none, Func<T, A> some)
+        public static Maybe<T> ToMaybe<T>(this T value)
         {
-            return maybe == null || maybe.IsNone ? none() : some(maybe.Value);
+            return new Maybe<T>(value);
         }
 
         public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, A> func)
         {
             return func == null || maybe == null || maybe.IsNone
-                ? new Maybe<A>()
+                ? Maybe<A>.None
                 : func(maybe.Value).ToMaybe();
         }
 
         public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, Maybe<A>> func)
         {
             return func == null || maybe == null || maybe.IsNone
-                ? new Maybe<A>()
+                ? Maybe<A>.None
                 : func(maybe.Value);
         }
 
-        public static Maybe<T> ToMaybe<T>(this T value)
+        public static A Match<T, A>(this Maybe<T> maybe, Func<A> none, Func<T, A> some)
         {
-            return new Maybe<T>(value);
+            return maybe == null || maybe.IsNone ? none() : some(maybe.Value);
         }
     }
 }
