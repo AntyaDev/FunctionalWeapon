@@ -35,7 +35,7 @@ namespace FunctionalWeapon.Monads
 
         public static readonly Maybe<T> None = new Maybe<T>();
         
-        internal T Value
+        public T Value
         {
             get
             {
@@ -56,14 +56,18 @@ namespace FunctionalWeapon.Monads
 
         public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, A> func)
         {
-            return func == null || maybe == null || maybe.IsNone
+            if (func == null) throw new ArgumentNullException("func");
+
+            return maybe == null || maybe.IsNone
                 ? Maybe<A>.None
                 : func(maybe.Value).ToMaybe();
         }
 
         public static Maybe<A> Bind<T, A>(this Maybe<T> maybe, Func<T, Maybe<A>> func)
         {
-            return func == null || maybe == null || maybe.IsNone
+            if (func == null) throw new ArgumentNullException("func");
+
+            return maybe == null || maybe.IsNone
                 ? Maybe<A>.None
                 : func(maybe.Value);
         }
