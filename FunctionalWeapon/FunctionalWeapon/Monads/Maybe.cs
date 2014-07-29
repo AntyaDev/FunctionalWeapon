@@ -70,7 +70,19 @@ namespace FunctionalWeapon.Monads
 
         public static A Match<T, A>(this Maybe<T> maybe, Func<A> none, Func<T, A> some)
         {
+            if (none == null) throw new ArgumentNullException("none");
+            if (some == null) throw new ArgumentNullException("some");
+
             return maybe == null || maybe.IsNone ? none() : some(maybe.Value);
+        }
+
+        public static void Match<T>(this Maybe<T> maybe, Action none, Action<T> some)
+        {
+            if (none == null) throw new ArgumentNullException("none");
+            if (some == null) throw new ArgumentNullException("some");
+
+            if (maybe == null || maybe.IsNone) none();
+            else some(maybe.Value);
         }
     }
 }
