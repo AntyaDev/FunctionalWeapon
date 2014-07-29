@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace FunctionalWeapon.Monads
@@ -30,16 +29,14 @@ namespace FunctionalWeapon.Monads
                 _value = value;
             }            
         }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        
         public bool IsSome { get { return _isSome; } }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsNone { get { return !_isSome; } }
 
         public static readonly Maybe<T> None = new Maybe<T>();
-
-        public T Value
+        
+        internal T Value
         {
             get
             {
@@ -50,6 +47,7 @@ namespace FunctionalWeapon.Monads
         }
     }
 
+    [DebuggerStepThrough]
     public static class MaybeExtensions
     {
         public static A Match<T, A>(this Maybe<T> maybe, Func<A> none, Func<T, A> some)

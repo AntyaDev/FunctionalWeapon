@@ -78,13 +78,5 @@ namespace FunctionalWeapon.Tests.MonadsTests
             var result = str.ToMaybe().Bind(s => s.IndexOf("T"));
             Assert.IsTrue(result.IsNone);
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Value_should_thorwn_exception_for_null_value()
-        {
-            string str = null;
-            var value = str.ToMaybe().Value;
-        }
     }
 }
