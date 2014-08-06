@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FunctionalWeapon.Monads;
 
 namespace FunctionalWeapon.Tests.MonadsTests
@@ -11,21 +10,21 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void ToMaybe_should_not_thrown_exception_on_null_reference()
         {
             string nullStr = null;
-            nullStr.ToMaybe();
+            Maybe.Apply(nullStr);
         }
 
         [TestMethod]
         public void ToMaybe_should_not_throw_exception_on_nullable_value_type()
         {
             int? i = null;
-            i.ToMaybe();
+            Maybe.Apply(i);
         }
 
         [TestMethod]
         public void IsNone_should_return_true_if_value_is_null()
         {
             string nullStr = null;
-            var strMaybe = nullStr.ToMaybe();
+            var strMaybe = Maybe.Apply(nullStr);
             Assert.IsTrue(strMaybe.IsNone);
         }
 
@@ -33,7 +32,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void IsNone_should_return_false_if_value_is_not_null()
         {
             string str = "not null";
-            var strMaybe = str.ToMaybe();
+            var strMaybe = Maybe.Apply(str);
             Assert.IsFalse(strMaybe.IsNone);
         }
 
@@ -41,7 +40,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void IsSome_should_return_false_if_value_is_null()
         {
             string nullStr = null;
-            var strMaybe = nullStr.ToMaybe();
+            var strMaybe = Maybe.Apply(nullStr);
             Assert.IsFalse(strMaybe.IsSome);
         }
 
@@ -49,7 +48,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void IsSome_should_return_true_if_value_is_not_null()
         {
             string str = "not null";
-            var strMaybe = str.ToMaybe();
+            var strMaybe = Maybe.Apply(str);
             Assert.IsTrue(strMaybe.IsSome);
         }
 
@@ -57,7 +56,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void Bind_should_return_Mybe_with_not_null_for_not_nullable_result()
         {
             string str = "not null";
-            var result = str.ToMaybe().Bind(s => s.IndexOf("l"));
+            var result = Maybe.Apply(str).Bind(s => s.IndexOf("l"));
             Assert.IsTrue(result.IsSome);
         }
 
@@ -65,9 +64,9 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void Bind_should_return_Maybe_with_null_for_nullable_result()
         {
             string str = "not null";
-            var result = str.ToMaybe()
-                            .Bind(s => s.IndexOf("T"))
-                            .Bind(i => i > 0 ? "not null" : null);
+            var result = Maybe.Apply(str)
+                              .Bind(s => s.IndexOf("T"))
+                              .Bind(i => i > 0 ? "not null" : null);
             Assert.IsTrue(result.IsNone);
         }
 
@@ -75,7 +74,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void Bind_should_return_Maybe_with_null_for_struct_type()
         {
             string str = null;
-            var result = str.ToMaybe().Bind(s => s.IndexOf("T"));
+            var result = Maybe.Apply(str).Bind(s => s.IndexOf("T"));
             Assert.IsTrue(result.IsNone);
         }
     }
