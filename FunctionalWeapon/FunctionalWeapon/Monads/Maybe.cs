@@ -28,6 +28,16 @@ namespace FunctionalWeapon.Monads
 
         public bool IsNone { get { return !_isSome; } }
 
+        public T Value
+        {
+            get
+            {
+                if (_value == null) throw new NullReferenceException("Value");
+
+                return _value;
+            }
+        }
+
         public static readonly Maybe<T> None = new Maybe<T>();
 
         public Maybe<A> Bind<A>(Func<T, A> func)
