@@ -18,7 +18,7 @@ namespace FunctionalWeapon.Monads
         readonly T _value;
         readonly bool _isSome;
 
-        public Maybe(T value)
+        internal Maybe(T value)
         {
             _isSome = value != null;
             _value = value;

@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace FunctionalWeapon.Monads
 {
     [DebuggerStepThrough]
-    public struct Result
+    public class Result
     {
         public static Result<T> Ok<T>(T value)
         {
@@ -30,13 +30,13 @@ namespace FunctionalWeapon.Monads
     }
 
     [DebuggerStepThrough]
-    public struct Result<T>
+    public class Result<T>
     {
         readonly T _value;
         readonly bool _isSuccess;
         readonly Exception _error;
 
-        public Result(T value, bool isSuccess, Exception error)
+        internal Result(T value, bool isSuccess, Exception error)
         {
             _value = value;
             _isSuccess = isSuccess;
