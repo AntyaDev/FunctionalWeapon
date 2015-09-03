@@ -56,7 +56,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void Bind_should_return_Mybe_with_not_null_for_not_nullable_result()
         {
             string str = "not null";
-            var result = Maybe.Apply(str).Bind(s => s.IndexOf("l"));
+            var result = Maybe.Apply(str).Map(s => s.IndexOf("l"));
             Assert.IsTrue(result.IsSome);
         }
 
@@ -65,8 +65,8 @@ namespace FunctionalWeapon.Tests.MonadsTests
         {
             string str = "not null";
             var result = Maybe.Apply(str)
-                              .Bind(s => s.IndexOf("T"))
-                              .Bind(i => i > 0 ? "not null" : null);
+                              .Map(s => s.IndexOf("T"))
+                              .Map(i => i > 0 ? "not null" : null);
             Assert.IsTrue(result.IsNone);
         }
 
@@ -74,7 +74,7 @@ namespace FunctionalWeapon.Tests.MonadsTests
         public void Bind_should_return_Maybe_with_null_for_struct_type()
         {
             string str = null;
-            var result = Maybe.Apply(str).Bind(s => s.IndexOf("T"));
+            var result = Maybe.Apply(str).Map(s => s.IndexOf("T"));
             Assert.IsTrue(result.IsNone);
         }
     }

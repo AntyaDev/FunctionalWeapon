@@ -40,14 +40,14 @@ namespace FunctionalWeapon.Monads
 
         public static readonly Maybe<T> None = new Maybe<T>();
 
-        public Maybe<A> Bind<A>(Func<T, A> func)
+        public Maybe<A> Map<A>(Func<T, A> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 
             return _isSome ? Maybe.Apply(func(_value)) : Maybe<A>.None;
         }
 
-        public Maybe<A> Bind<A>(Func<T, Maybe<A>> func)
+        public Maybe<A> Map<A>(Func<T, Maybe<A>> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 
