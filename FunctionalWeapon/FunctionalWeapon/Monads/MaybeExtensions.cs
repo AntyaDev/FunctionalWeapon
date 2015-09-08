@@ -42,5 +42,17 @@ namespace FunctionalWeapon.Monads
         {
             return Maybe.Apply(items.FirstOrDefault());
         }
+
+        /// <summary>
+        /// First item matching <paramref name="predicate"/> or Nothing
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static Maybe<T> FirstMaybe<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+        {
+            return items.Where(predicate).FirstMaybe();
+        }
     }
 }
